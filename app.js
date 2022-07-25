@@ -22,6 +22,7 @@ const options = {
     'http://localhost:3000',
     'http://movies.gilyova.nomoredomains.xyz',
     'https://movies.gilyova.nomoredomains.xyz',
+    'http://api.movies.gilyova.nomoredomains.xyz/signup',
   ],
   credentials: true,
 };
@@ -38,11 +39,7 @@ mongoose.connect(NODE_ENV === 'production' ? DB : 'mongodb://127.0.0.1:27017/mov
 
 app.use(requestLogger);
 
-console.error("requestLogger");
-
 app.use(limiter);
-
-console.error("limiter");
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -53,8 +50,6 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-console.error("signup");
-
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -62,15 +57,9 @@ app.post('/signin', celebrate({
   }),
 }), login);
 
-console.error("signin");
-
 app.post('/signout', logout);
 
-console.error("signout");
-
 app.use(auth);
-
-console.error("auth");
 
 app.use('/users', require('./routes/users'));
 app.use('/movies', require('./routes/movies'));

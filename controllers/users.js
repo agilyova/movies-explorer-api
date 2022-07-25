@@ -24,8 +24,6 @@ module.exports.getCurrentUser = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  console.log("U are in create menu");
-
   const {
     email, password, name,
   } = req.body;
