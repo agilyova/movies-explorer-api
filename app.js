@@ -22,7 +22,6 @@ const options = {
     'http://localhost:3000',
     'http://movies.gilyova.nomoredomains.xyz',
     'https://movies.gilyova.nomoredomains.xyz',
-    'http://api.movies.gilyova.nomoredomains.xyz/signup',
   ],
   credentials: true,
 };
