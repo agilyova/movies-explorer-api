@@ -5,6 +5,8 @@ const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
 const ConflictError = require('../errors/conflict-err');
 
+const { JWT_SECRET_DEV } = require('../helpers/constants');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const MONGO_DUPLICATE_ERROR_CODE = 11000;
@@ -78,7 +80,7 @@ module.exports.login = (req, res, next) => {
         throw new UnauthorizedError('Неверные Пользователь или пароль');
       }
 
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'super_secret_key', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV, { expiresIn: '7d' });
 
       res
         .cookie('jwt', token, {

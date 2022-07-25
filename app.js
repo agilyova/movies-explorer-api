@@ -13,6 +13,8 @@ const errorsHandler = require('./middlewares/errorsHandler');
 const { limiter } = require('./middlewares/rateLimit');
 const NotFoundError = require('./errors/not-found-err');
 
+const { DB_URL } = require('./helpers/constants');
+
 const { NODE_ENV, DB, PORT = 3001 } = process.env;
 
 const app = express();
@@ -32,7 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-mongoose.connect(NODE_ENV === 'production' ? DB : 'mongodb://127.0.0.1:27017/moviesdb', {
+mongoose.connect(NODE_ENV === 'production' ? DB : DB_URL, {
   useNewUrlParser: true,
 });
 
@@ -56,9 +58,9 @@ app.post('/signin', celebrate({
   }),
 }), login);
 
-app.post('/signout', logout);
-
 app.use(auth);
+
+app.post('/signout', logout);
 
 app.use('/users', require('./routes/users'));
 app.use('/movies', require('./routes/movies'));
