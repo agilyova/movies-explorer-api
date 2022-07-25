@@ -38,7 +38,7 @@ mongoose.connect(NODE_ENV === 'production' ? DB : 'mongodb://127.0.0.1:27017/mov
 
 app.use(requestLogger);
 
-/*app.use(limiter);*/
+app.use(limiter);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
