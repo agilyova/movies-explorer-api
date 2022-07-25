@@ -13,26 +13,26 @@ const errorsHandler = require('./middlewares/errorsHandler');
 const { limiter } = require('./middlewares/rateLimit');
 const NotFoundError = require('./errors/not-found-err');
 
-const { PORT = 3001 } = process.env;
+const { NODE_ENV, DB, PORT = 3001 } = process.env;
 
 const app = express();
 
 const options = {
   origin: [
     'http://localhost:3000',
-    'http://mesto.gilyova.nomorepartiesxyz.ru',
-    'https://mesto.gilyova.nomorepartiesxyz.ru',
+    'http://movies.gilyova.nomoredomains.xyz',
+    'https://movies.gilyova.nomoredomains.xyz',
   ],
   credentials: true,
 };
 
-app.use('*', cors(options));
+/*app.use('*', cors(options));*/
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://127.0.0.1:27017/moviesdb', {
+mongoose.connect(NODE_ENV === 'production' ? DB : 'mongodb://127.0.0.1:27017/moviesdb', {
   useNewUrlParser: true,
 });
 
