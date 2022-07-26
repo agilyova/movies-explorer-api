@@ -5,6 +5,8 @@ const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
 const ConflictError = require('../errors/conflict-err');
 
+const { WRONG_EMAIL_OR_PASSWORD, EMAIL_IS_TAKEN, USER_NOT_FOUND } = require('../errors/error-constunts');
+
 const { JWT_SECRET_DEV } = require('../helpers/constants');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -15,7 +17,7 @@ const handleUser = (user, res) => {
   if (user) {
     res.send(user);
   } else {
-    throw new NotFoundError('Пользователь не найден');
+    throw new NotFoundError(USER_NOT_FOUND);
   }
 };
 
@@ -38,7 +40,7 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
-        next(new ConflictError('Данный email уже занят'));
+        next(new ConflictError(EMAIL_IS_TAKEN));
       } else {
         next(err);
       }
@@ -57,7 +59,7 @@ module.exports.updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
-        next(new ConflictError('Данный email уже занят'));
+        next(new ConflictError(EMAIL_IS_TAKEN));
       } else {
         next(err);
       }
@@ -71,13 +73,13 @@ module.exports.login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Неверные Пользователь или пароль');
+        throw new UnauthorizedError(WRONG_EMAIL_OR_PASSWORD);
       }
       return Promise.all([user, bcrypt.compare(password, user.password)]);
     })
     .then(([user, match]) => {
       if (!match) {
-        throw new UnauthorizedError('Неверные Пользователь или пароль');
+        throw new UnauthorizedError(WRONG_EMAIL_OR_PASSWORD);
       }
 
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV, { expiresIn: '7d' });

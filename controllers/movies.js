@@ -2,8 +2,10 @@ const Movie = require('../models/movie');
 const NotFoundError = require('../errors/not-found-err');
 const ForbiddenError = require('../errors/forbidden-err');
 
+const { DELETE_FILM_FORBIDDEN, FILM_NOT_FOUND } = require('../errors/error-constunts');
+
 const handleMovieNotFound = () => {
-  throw new NotFoundError('Фильм не найден');
+  throw new NotFoundError(FILM_NOT_FOUND);
 };
 
 module.exports.getMovies = (req, res, next) => {
@@ -61,7 +63,7 @@ module.exports.deleteMovie = (req, res, next) => {
         handleMovieNotFound();
       }
       if (req.user._id !== movie.owner.toString()) {
-        throw new ForbiddenError('Нельзя удалить чужой фильм из избранного');
+        throw new ForbiddenError(DELETE_FILM_FORBIDDEN);
       }
       return movie.remove();
     })
