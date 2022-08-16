@@ -89,7 +89,7 @@ module.exports.login = (req, res, next) => {
           maxAge: 3600000 * 24 * 7,
           httpOnly: true,
           sameSite: 'none',
-          secure: true, // {NODE_ENV === 'production'} Postman - Secure - If present, the cookie is only sent when the URL begins with https:// and won't be sent over an insecure connection.
+          secure: NODE_ENV === 'production', // Postman - Secure - If present, the cookie is only sent when the URL begins with https:// and won't be sent over an insecure connection.
         })
         .send({ message: 'Вы успешно авторизованы' });
     })

@@ -4,6 +4,7 @@ module.exports.NOT_FOUND = 404;
 module.exports.CONFLICT = 409;
 module.exports.INTERNAL_SERVER_ERROR = 500;
 
+
 module.exports.WRONG_EMAIL_OR_PASSWORD = 'Вы ввели неправильный логин или пароль.';
 module.exports.NEED_AUTHORISATION = 'Необходима авторизация';
 module.exports.EMAIL_IS_TAKEN = 'Пользователь с таким email уже существует';
