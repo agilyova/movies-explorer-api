@@ -4,7 +4,7 @@ const { createUser, login, logout } = require('../controllers/users');
 
 router.post('/signup', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
+    email: Joi.string().required().email({ minDomainSegments: 1, tlds: { allow: false } }),
     password: Joi.string().required().min(5),
     name: Joi.string().trim().required().min(2)
       .max(30),
@@ -13,7 +13,7 @@ router.post('/signup', celebrate({
 
 router.post('/signin', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
+    email: Joi.string().required().email({ minDomainSegments: 1, tlds: { allow: false } }),
     password: Joi.string().required(),
   }),
 }), login);
